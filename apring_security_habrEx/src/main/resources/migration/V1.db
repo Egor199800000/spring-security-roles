@@ -1,0 +1,36 @@
+CREATE TABLE users
+(
+    id   BIGSERIAL PRIMARY KEY,
+    name VARCHAR(200) NOT NULL
+);
+
+CREATE TABLE community
+(
+    id   BIGSERIAL PRIMARY KEY,
+    name VARCHAR(200) NOT NULL
+);
+
+CREATE TABLE post
+(
+    id           BIGSERIAL PRIMARY KEY,
+    name         VARCHAR(200)                     NOT NULL,
+    community_id BIGINT REFERENCES community (id) NOT NULL
+);
+
+CREATE TABLE community_role
+(
+    id           BIGSERIAL PRIMARY KEY,
+    user_id      BIGINT REFERENCES users (id)     NOT NULL,
+    community_id BIGINT REFERENCES community (id) NOT NULL,
+    type         VARCHAR(50)                      NOT NULL,
+    UNIQUE (user_id, community_id, type)
+);
+
+CREATE TABLE post_role
+(
+    id      BIGSERIAL PRIMARY KEY,
+    user_id BIGINT REFERENCES users (id) NOT NULL,
+    post_id BIGINT REFERENCES post (id)  NOT NULL,
+    type    VARCHAR(50)                  NOT NULL,
+    UNIQUE (user_id, post_id, type)
+);
